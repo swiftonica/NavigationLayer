@@ -1,3 +1,3 @@
 # NavigationLayer
 
-A description of this package.
+Literally navigation layer 
