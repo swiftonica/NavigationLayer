@@ -1,6 +1,6 @@
 import Foundation
 
-protocol Coordinatable: StatelessCompletionable, AnyObject {
+public protocol Coordinatable: StatelessCompletionable, AnyObject {
     func start()
     func add(coordinatable: Coordinatable)
     func remove(coordinatable: Coordinatable)
@@ -8,7 +8,7 @@ protocol Coordinatable: StatelessCompletionable, AnyObject {
     var childCoordinators: [Coordinatable] { get set }
 }
 
-extension Coordinatable {
+public extension Coordinatable {
     func add(coordinatable: Coordinatable) {
         guard !childCoordinators.contains(where: {
             $0 === coordinatable
@@ -36,11 +36,11 @@ extension Coordinatable {
     }
 }
 
-protocol Completionable {
+public protocol Completionable {
     associatedtype ReturnData
     var completion: ((ReturnData) -> Void)? { get set }
 }
 
-protocol StatelessCompletionable {
+public protocol StatelessCompletionable {
     var completion: (() -> Void)? { get set }
 }
