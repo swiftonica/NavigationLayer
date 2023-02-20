@@ -1,15 +1,15 @@
 import Foundation
 
-public protocol Coordinatable: StatelessCompletionable, AnyObject {
+public protocol BaseCoordinatable: AnyObject {
     func start()
-    func add(coordinatable: Coordinatable)
-    func remove(coordinatable: Coordinatable)
+    func add(coordinatable: BaseCoordinatable)
+    func remove(coordinatable: BaseCoordinatable)
 
-    var childCoordinators: [Coordinatable] { get set }
+    var childCoordinators: [BaseCoordinatable] { get set }
 }
 
-public extension Coordinatable {
-    func add(coordinatable: Coordinatable) {
+public extension BaseCoordinatable {
+    func add(coordinatable: BaseCoordinatable) {
         guard !childCoordinators.contains(where: {
             $0 === coordinatable
         }) else {
@@ -18,7 +18,7 @@ public extension Coordinatable {
         childCoordinators.append(coordinatable)
     }
     
-    func remove(coordinatable: Coordinatable) {
+    func remove(coordinatable: BaseCoordinatable) {
         if childCoordinators.isEmpty { return }
         if !coordinatable.childCoordinators.isEmpty {
             coordinatable.childCoordinators
@@ -35,6 +35,9 @@ public extension Coordinatable {
         }
     }
 }
+
+public protocol DatelessCoordinatable: StatelessCompletionable {}
+public protocol Coordinatable: Completionable {}
 
 public protocol Completionable {
     associatedtype ReturnData
