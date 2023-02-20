@@ -1,15 +1,15 @@
 import Foundation
 
-public protocol BaseCoordinatable: AnyObject {
+public protocol CompletionlessCoordinatable: AnyObject {
     func start()
-    func add(coordinatable: BaseCoordinatable)
-    func remove(coordinatable: BaseCoordinatable)
+    func add(coordinatable: CompletionlessCoordinatable)
+    func remove(coordinatable: CompletionlessCoordinatable)
 
-    var childCoordinators: [BaseCoordinatable] { get set }
+    var childCoordinators: [CompletionlessCoordinatable] { get set }
 }
 
-public extension BaseCoordinatable {
-    func add(coordinatable: BaseCoordinatable) {
+public extension CompletionlessCoordinatable {
+    func add(coordinatable: CompletionlessCoordinatable) {
         guard !childCoordinators.contains(where: {
             $0 === coordinatable
         }) else {
@@ -18,7 +18,7 @@ public extension BaseCoordinatable {
         childCoordinators.append(coordinatable)
     }
     
-    func remove(coordinatable: BaseCoordinatable) {
+    func remove(coordinatable: CompletionlessCoordinatable) {
         if childCoordinators.isEmpty { return }
         if !coordinatable.childCoordinators.isEmpty {
             coordinatable.childCoordinators
@@ -36,14 +36,14 @@ public extension BaseCoordinatable {
     }
 }
 
-public protocol DatelessCoordinatable: StatelessCompletionable {}
-public protocol Coordinatable: Completionable {}
+public typealias DatelessCoordinatable = CompletionlessCoordinatable & DatelessCompletionable
+public typealias Coordinatable = CompletionlessCoordinatable & Completionable
 
 public protocol Completionable {
     associatedtype ReturnData
     var completion: ((ReturnData) -> Void)? { get set }
 }
 
-public protocol StatelessCompletionable {
+public protocol DatelessCompletionable {
     var completion: (() -> Void)? { get set }
 }
